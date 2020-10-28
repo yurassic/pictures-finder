@@ -13,7 +13,12 @@ const SearchForm = ({ onSubmit }) => {
   };
 
   return (
-    <form style={{ width: "100%" }} noValidate onSubmit={handleSubmit}>
+    <form
+      style={{ width: "100%" }}
+      data-testid="form"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <TextField
         id="outlined-basic"
         label="Type words associated with the pictures you are looking for"
