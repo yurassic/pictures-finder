@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -18,27 +19,19 @@ const App = () => {
   const [error, setError] = useState(null);
   const [nothingFound, setNothingFound] = useState(false);
 
-  /* TODO:
-   * Add tests
-   * Refactor
-   * Deploy
-   */
-
-  const getPictures = (keyWord) => {
+  const getPictures = async (keyWord) => {
     setIsFetching(true);
     setError(null);
 
-    fetch(getUrl(keyWord))
-      .then((response) => response.json())
-      .then((result) => {
-        setIsFetching(false);
-        setNothingFound(result?.total === 0);
-        setPictures(result?.hits);
-      })
-      .catch((error) => {
-        setIsFetching(false);
-        setError(error?.message);
-      });
+    try {
+      const { data } = await axios.get(getUrl(keyWord));
+      setIsFetching(false);
+      setNothingFound(data?.total === 0);
+      setPictures(data?.hits);
+    } catch (error) {
+      setIsFetching(false);
+      setError(error?.message);
+    }
   };
 
   return (
