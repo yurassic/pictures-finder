@@ -15,18 +15,24 @@ describe("App", () => {
     );
 
     render(<App />);
+    await fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "dog" },
+    });
     await fireEvent.submit(screen.getByTestId("form"));
     const items = await screen.findAllByTestId("picture");
 
     expect(items).toHaveLength(2);
   });
 
-  test("fetches stories from an API and fails", async () => {
+  test("fetches pictures from an API and fails", async () => {
     axios.get.mockImplementationOnce(() =>
       Promise.reject(new Error("Network Error"))
     );
 
     render(<App />);
+    await fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "dog" },
+    });
     await fireEvent.submit(screen.getByTestId("form"));
     const message = await screen.findByText(/Network Error/);
 
@@ -39,6 +45,9 @@ describe("App", () => {
     );
 
     render(<App />);
+    await fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "dog" },
+    });
     await fireEvent.submit(screen.getByTestId("form"));
     const message = await screen.findByText(/We don't found any picture/);
 
