@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "@material-ui/lab/Alert";
 import Pagination from "@material-ui/lab/Pagination";
+import Modal from "@material-ui/core/Modal";
 
 import SearchForm from "./components/SearchForm";
 import PicturesList from "./components/PicturesList";
@@ -21,6 +22,8 @@ const App = () => {
   const [error, setError] = useState(null);
   const [totalCount, setTotalCount] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState(null);
   const keyWordRef = useRef(null);
 
   const getPictures = async (keyWord, page = 1) => {
@@ -47,6 +50,11 @@ const App = () => {
     getPictures(keyWordRef.current, value);
   };
 
+  const handleOpenModal = useCallback((imageUrl) => {
+    setModalOpen(true);
+    setModalImageUrl(imageUrl);
+  }, []);
+
   return (
     <Container maxWidth="md">
       <Grid
@@ -64,7 +72,10 @@ const App = () => {
           <>
             {totalCount?.pictures > 0 && (
               <>
-                <PicturesList pictures={pictures} />
+                <PicturesList
+                  pictures={pictures}
+                  onImageClick={handleOpenModal}
+                />
                 <Box m={1} />
                 <Pagination
                   count={totalCount?.pages}
@@ -88,6 +99,13 @@ const App = () => {
           </>
         )}
       </Grid>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <img
+          className="modal-img"
+          data-testid="picture-in-modal"
+          src={modalImageUrl}
+        />
+      </Modal>
     </Container>
   );
 };
