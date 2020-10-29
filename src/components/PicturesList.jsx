@@ -7,7 +7,11 @@ const PicturesList = ({ pictures }) => (
   <GridList cellHeight={160} cols={3}>
     {pictures.map((picture) => (
       <GridListTile key={picture.id} cols={1}>
-        <img src={picture.webformatURL} alt={picture.tags} />
+        <img
+          data-testid="picture"
+          src={picture.webformatURL}
+          alt={picture.tags}
+        />
       </GridListTile>
     ))}
   </GridList>

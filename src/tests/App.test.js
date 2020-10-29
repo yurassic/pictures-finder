@@ -9,12 +9,14 @@ jest.mock("axios");
 describe("App", () => {
   test("fetches pictures from an API and displays them", async () => {
     axios.get.mockImplementationOnce(() =>
-      Promise.resolve({ data: { hits: mockPictures, total: 2 } })
+      Promise.resolve({
+        data: { hits: mockPictures, totalHits: 2, total: 2 },
+      })
     );
 
     render(<App />);
     await fireEvent.submit(screen.getByTestId("form"));
-    const items = await screen.findAllByRole("listitem");
+    const items = await screen.findAllByTestId("picture");
 
     expect(items).toHaveLength(2);
   });
